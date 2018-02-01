@@ -1,0 +1,8 @@
+oldSelfPlay/*
+selfPlayRecords/*
+backupModels/*
+*.cpp
+__pycache__
+build
+.vscode
+*.pyd

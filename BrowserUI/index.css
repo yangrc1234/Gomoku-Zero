@@ -1,0 +1,31 @@
+canvas {
+    margin: 10px auto;
+    display: block;
+    box-shadow: -2px -2px 2px #EFEFEF, 5px 5px 5px #B9B9B9;
+}
+
+#start {
+    width: 200px;
+    margin: 50px auto 0;
+    padding: 10px 10px;
+    color: white;
+    background-color: #8f7a66;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#start:hover {
+    background-color: #9f8b77;
+}
+
+#config {
+    width: 250px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    margin: 20px auto 0;
+    box-shadow: -2px -2px 2px #EFEFEF, 5px 5px 5px #B9B9B9;
+}
