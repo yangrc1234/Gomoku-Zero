@@ -1,4 +1,3 @@
-from keras import Model
 import os
 import json
 from collections import namedtuple
@@ -15,8 +14,10 @@ from .model import objective_function_for_policy, objective_function_for_value
 RawData = namedtuple('RawData', ['moveHistory', 'policyHistory', 'winner'])
 
 class Optimizer:
-    def __init__(self,config,start_total_steps = 0):
+    def __init__(self,config, record_folder, model_folder, start_total_steps = 0):
         self.config = config
+        self.record_folder = record_folder
+        self.model_folder = model_folder
         self.model = None # type: RenjuModel
         self.datasets_x = list()
         self.datasets_policy = list()
@@ -27,21 +28,21 @@ class Optimizer:
         self.datasets_x = list()
         self.datasets_policy = list()
         self.datasets_z = list()
-        for filename in os.listdir('selfPlayRecords'):
-            with open('selfPlayRecords/' + filename,'rb') as file:
+        for filename in os.listdir(self.record_folder):
+            with open(self.record_folder + '/' + filename,'rb') as file:
                 raw_data = json.load(file)
                 typedRawData = RawData(raw_data['move'], raw_data['policy'], raw_data['winner'])
                 self._flat_raw_data(typedRawData)
 
     def _load_model(self):
         self.model = RenjuModel(self.config)
-        if os.path.exists('currentModel'):
-            self.model.load('currentModel')
+        if os.path.exists(self.model_folder):
+            self.model.load(self.model_folder)
         else:
             self.model.build()
-            self.model.save('currentModel')
+            self.model.save(self.model_folder)
 
-    def _flat_raw_data(self,rd:RawData):
+    def _flat_raw_data(self, rd:RawData):
         boardWidth = self.config.common.game_board_size 
         board = np.zeros((boardWidth,boardWidth))
         player = -1
@@ -69,7 +70,7 @@ class Optimizer:
             player *= -1
 
     def save_current_model(self):
-        self.model.save('currentModel')
+        self.model.save(self.model_folder)
 
     def optimize(self, epoch=1):
         self._load_raw_selfplay_records()

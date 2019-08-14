@@ -24,7 +24,7 @@ class AutoTrainer:
                 trainedSteps = json.load(atconfig)['Steps']                
         self.config = mconfig.MainConfig()
         self.sp = SelfPlay(NEWEST_MODEL_FOLDER, PLAY_RECORD_FOLDER, self.config)
-        self.op = Optimizer(self.config, trainedSteps)
+        self.op = Optimizer(self.config, PLAY_RECORD_FOLDER, NEWEST_MODEL_FOLDER, trainedSteps)
 
     def play(self):
         if not os.path.exists(PLAY_RECORD_FOLDER):

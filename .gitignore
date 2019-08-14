@@ -1,6 +1,7 @@
-oldSelfPlay/*
+OldPlayRecords
 SelfPlayRecords
-backupModels/*
+CurrentModel
+AutoTrainConfig
 *.cpp
 __pycache__
 .vscode

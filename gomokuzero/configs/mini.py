@@ -27,3 +27,10 @@ class MainConfig:
         self.model = ModelConfig()
         self.train = TrainConfig()
         self.common = CommonConfig()
+#Use this when evaluate.
+class EvaluateConfig:
+    def __init__(self):
+        self.model = ModelConfig()
+        self.train = TrainConfig()
+        self.common = CommonConfig()
+        self.train.tau_change_step = -1
