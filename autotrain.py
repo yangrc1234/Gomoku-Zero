@@ -1,6 +1,6 @@
 from gomokuzero.optimize import Optimizer
 from gomokuzero.self_train import SelfPlay
-import gomokuzero.configs.mini as mconfig
+import gomokuzero.configs.normal as mconfig
 import os
 import shutil
 import datetime

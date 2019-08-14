@@ -112,7 +112,7 @@ class Mcts:
         deltav = 0
         while currentNode.expanding:
             await asyncio.sleep(.0001)
-        if not currentNode.expanded:
+        if not currentNode.expanded:    #Expanded flag will only be set on non-finished node.
             currentNode.expanding = True
             deltav = await self.expand_and_evaluate(currentNode)
             currentNode.expanding = False
@@ -124,12 +124,12 @@ class Mcts:
                 if (node.game_board == None):       
                     node.game_board = currentNode.game_board.copy()      #change place?
                     node.game_board.play(edge.x,edge.y)
-                deltav = await self.search_node(node)
+                deltav = -(await self.search_node(node))
                 currentNode.childN[edge] -= 3       #virtual loss
                 currentNode.childN[edge] += 1
                 currentNode.childW[edge] += deltav
                 currentNode.childQ[edge] = currentNode.childW[edge] / currentNode.childN[edge]
-        return -deltav * self.config.train.mcts_upwrad_value_decay
+        return deltav * self.config.train.mcts_upwrad_value_decay
 
     async def predict(self,x):
         narra = np.zeros(shape=(2,self.config.common.game_board_size,self.config.common.game_board_size))
@@ -160,10 +160,10 @@ class Mcts:
         #use the exisiting gameboard, run a predict, then store all move possibilities as P, return the value.
        # playedByme = -currentNode.game_board.playerSide * self.playerIndex
 
-        if currentNode.game_board.finished:
-            return -1
+        if currentNode.game_board.finished: #It's my turn, but it's a finished game, so it sucks.
+            return -1000.0
 
-        currentNode.expanded=True
+        currentNode.expanded=True       #Only set expanded on non-finished game, and do predict.
         future = await self.predict(currentNode.game_board)
         await future
         policy,v = future.result()
@@ -178,6 +178,10 @@ class Mcts:
         #search next node in an already expanded node
         #return None, if currentNode is terminal state.
         #a node already expanded contains all valid nodes(edges) that have gameboard.
+
+        if currentNode.game_board.finished:
+            return None
+
         totalN = np.sum(currentNode.childN)
         width = self.config.common.game_board_size
 

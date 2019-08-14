@@ -1,5 +1,5 @@
 from gomokuzero.mcts import Mcts, Hand
-import gomokuzero.configs.mini as mconfig
+import gomokuzero.configs.normal as mconfig
 from gomokuzero.game import GameState
 from gomokuzero.model import RenjuModel
 

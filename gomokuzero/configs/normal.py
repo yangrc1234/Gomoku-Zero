@@ -1,6 +1,6 @@
 class CommonConfig:
     def __init__(self):
-        self.game_board_size = 9    #keep same with below input_size
+        self.game_board_size = 11    #keep same with below input_size
 
 class TrainConfig:
     def __init__(self):
@@ -15,7 +15,7 @@ class TrainConfig:
 
 class ModelConfig:
     def __init__(self):
-        self.input_size = 9
+        self.input_size = 11
         self.cnn_filter_num = 64
         self.cnn_filter_size = 3
         self.res_layer_num = 6
