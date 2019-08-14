@@ -1,6 +1,6 @@
-import model
-import gameCython as game
-import mcts
+from .model import RenjuModel
+from .game import GameState
+from .mcts import Mcts
 from logging import getLogger
 import logging
 import json
@@ -13,35 +13,30 @@ logger = getLogger(__name__)
 
 class SelfPlay:
 
-    def __init__(self,config):
+    def __init__(self, model_folder, play_records_folder, config):
         self.config = config
+        self.play_records_folder = play_records_folder
+        self.model_folder = model_folder
         self.mctsTree = None
         self.gameBoard = None
         self.bestModel = None
 
-    def load_model(self):
-        t = model.RenjuModel(self.config)
-        if os.path.exists('currentModel'):
-            t.load('currentModel')
-            return t
-
-    def save_game_history(self,gameHistory):
+    def __save_game_history(self, gameHistory):
         #save file with timestamp
-        if not os.path.exists('selfPlayRecords'):
-            os.makedirs('selfPlayRecords')
+        if not os.path.exists(self.play_records_folder):
+            os.makedirs(self.play_records_folder)
         curdate = datetime.datetime.now()
         filename = f"{curdate.year}-{curdate.month}-{curdate.day}-{curdate.hour}-{curdate.minute}-{curdate.second}-selfplay.json"
-        with open('selfPlayRecords/' + filename,'w') as fileHandle:
+        with open(self.play_records_folder + '/' + filename,'w') as fileHandle:
             json.dump(gameHistory,fileHandle)
-        pass
 
     def single_self_train(self):
         if self.bestModel == None:
-            self.bestModel = self.load_model() #Type : RenjuModel
+            self.bestModel = RenjuModel.load_from_folder_or_new(self.model_folder, self.config)
         #get a mcts tree model
-        self.mctsTree = [mcts.Mcts(self.config, -1, self.bestModel),mcts.Mcts(self.config, 1,self.bestModel)]
+        self.mctsTree = [Mcts(self.config, -1, self.bestModel),Mcts(self.config, 1,self.bestModel)]
         #start a game
-        gameBoard = game.game_state(self.config.common.game_board_size)
+        gameBoard = GameState(self.config.common.game_board_size)
         #store all moves into a list.
         moveHistory = list()
         
@@ -74,7 +69,7 @@ class SelfPlay:
                 'move' : moveHistory,
                 'winner' : gameBoard.winner
             }
-            self.save_game_history(gameHistory)
+            self.__save_game_history(gameHistory)
         else:
             logger.warning('Game didn\' finish normally')
         #one game complete

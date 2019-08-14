@@ -1,12 +1,12 @@
 from model import RenjuModel
 import mcts
-import gameCython
-from configs.normal import EvaluateConfig
+from .game import GameState
 
 class Evaluator:
-    def __init__(self,m1path,m2path):
-        self.m1 = RenjuModel(EvaluateConfig())
-        self.m2 = RenjuModel(EvaluateConfig())
+    def __init__(self, m1path, m2path, config):
+        self.config = config
+        self.m1 = RenjuModel(config)
+        self.m2 = RenjuModel(config)
         self.load(m1path,m2path)
 
     def load(self,m1path,m2path):
@@ -25,8 +25,8 @@ class Evaluator:
         print(f"Model 1 vs Model 2 with win percentage of {(-counter + trailCount) / 100}")
 
     def single_versus(self):
-        gameBoard = gameCython.game_state(EvaluateConfig().common.game_board_size)
-        mctsTree = [mcts.Mcts(EvaluateConfig(),-1,self.m1),mcts.Mcts(EvaluateConfig(),1,self.m2)]
+        gameBoard = GameState(self.config.common.game_board_size)
+        mctsTree = [mcts.Mcts(self.config,-1,self.m1),mcts.Mcts(self.config,1,self.m2)]
         playerIndex = -1
         while True:
             print(gameBoard.print_beautiful() + '\n')
@@ -49,5 +49,6 @@ class Evaluator:
             print('Game didn\' finish normally')
 
 if __name__ == '__main__' :
-    eva = Evaluator('backupModels/model2018-1-10-3-6-3','currentModel')
+    from .configs.normal import EvaluateConfig
+    eva = Evaluator('backupModels/model2018-1-10-3-6-3','currentModel', EvaluateConfig())
     eva.test()

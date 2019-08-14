@@ -1,15 +1,15 @@
-import mcts
-import configs.normal as mconfig
-import gameCython
-from model import RenjuModel
+from gomokuzero.mcts import Mcts, Hand
+import gomokuzero.configs.normal as mconfig
+from gomokuzero.game import GameState
+from gomokuzero.model import RenjuModel
+
 def test():
     conf = mconfig.EvaluateConfig()
-    model = RenjuModel(conf)
-    model.load('currentModel')
+    model = RenjuModel.load_from_folder_or_new('CurrentModel', mconfig.MainConfig())
 
     while True:
-        gameBoard = gameCython.game_state(conf.common.game_board_size)
-        mctsTree = mcts.Mcts(conf,1,model)
+        gameBoard = GameState(conf.common.game_board_size)
+        mctsTree = Mcts(conf,1,model)
         playerIndex = -1
         while True:
             print(gameBoard.print_beautiful() + '\n')
@@ -17,7 +17,7 @@ def test():
             if playerIndex < 0 :
                 testerMove = input() # type: str
                 xstr,ystr = testerMove.split(',')
-                move = mcts.Hand(x = int(xstr) -1 ,y = int(ystr) -1)
+                move = Hand(x = int(xstr) -1 ,y = int(ystr) -1)
             else:
                 move,policy_ = mctsTree.search_move(autoMoveIntoChild = False)
 

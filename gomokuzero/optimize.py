@@ -1,16 +1,16 @@
 from keras import Model
-from model import RenjuModel
 import os
 import json
 from collections import namedtuple
 import numpy as np
 import keras.callbacks as kcallback
 from keras.models import load_model
-from model import objective_function_for_policy, objective_function_for_value
 import keras.backend as K
 from keras.callbacks import Callback
 from keras.optimizers import SGD
 import shutil
+from .model import RenjuModel
+from .model import objective_function_for_policy, objective_function_for_value
 
 RawData = namedtuple('RawData', ['moveHistory', 'policyHistory', 'winner'])
 

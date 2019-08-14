@@ -1,8 +1,7 @@
 oldSelfPlay/*
-selfPlayRecords/*
+SelfPlayRecords
 backupModels/*
 *.cpp
 __pycache__
-build
 .vscode
 *.pyd

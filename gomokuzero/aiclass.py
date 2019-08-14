@@ -1,23 +1,19 @@
-
-from mcts import Mcts
-from mcts import Hand
-from gameCython import game_state
-from configs.normal import EvaluateConfig as modelConfig
-from model import RenjuModel
 import os
-
 import numpy as np
+from .mcts import Mcts, Hand
+from .game import GameState
+from .model import RenjuModel
 
 class AIRunner:
-    def __init__(self):
-        self.model = RenjuModel(modelConfig())
-        self.model.load('./currentModel')
-        self.config = modelConfig()
+    def __init__(self, config, model_path):
+        self.model = RenjuModel(config)
+        self.model.load(model_path)
+        self.config = config
         self.restart_game()
 
     def restart_game(self,otherPlayerIndex = -1):
-        self.game = game_state(self.config.common.game_board_size)
-        self.mcts = Mcts(modelConfig(), -otherPlayerIndex,self.model)
+        self.game = GameState(self.config.common.game_board_size)
+        self.mcts = Mcts(self.config, -otherPlayerIndex,self.model)
         self.aiplayer = -otherPlayerIndex
 
     def get_status(self):

@@ -16,7 +16,6 @@ from keras.models import load_model
 from keras.optimizers import SGD
 from keras.models import model_from_json
 
-import game
 import numpy as np
 
 logger = getLogger(__name__)
@@ -29,6 +28,7 @@ class RenjuModel:
     def __init__(self, config):
         self.config = config
         self.model = None
+        self.build()
 
     #predict a game basedon game_state.
     #the value is based on the current player. the higher, the better position the current player is in.
@@ -92,7 +92,15 @@ class RenjuModel:
         with open(path + '/model.json', "w") as json_file:
             json_file.write(model_json)
     
+    @staticmethod
+    def load_from_folder_or_new(model_folder, config):
+        t = RenjuModel(config)
+        if os.path.exists(model_folder):
+            t.load(model_folder)
+        return t
+
     def load(self,path, old = False):
+        """
         if old:
             self.model = load_model(path,custom_objects={
                 "objective_function_for_policy" : objective_function_for_policy,
@@ -106,7 +114,8 @@ class RenjuModel:
                 "objective_function_for_policy" : objective_function_for_policy,
                 "objective_function_for_value" : objective_function_for_value
             })
-            self.model.load_weights(path + '/model.h5')
+        """
+        self.model.load_weights(path + '/model.h5')
             
 
 def objective_function_for_policy(y_true, y_pred):

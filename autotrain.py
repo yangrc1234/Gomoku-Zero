@@ -1,13 +1,16 @@
-
-
-import optimize
-import self_train
-import configs.normal as mconfig
+from gomokuzero.optimize import Optimizer
+from gomokuzero.self_train import SelfPlay
+import gomokuzero.configs.mini as mconfig
 import os
 import shutil
 import datetime
 import time
 import json
+
+PLAY_RECORD_FOLDER = './SelfPlayRecords'
+OLD_PLAY_RECORD_FOLDER = './OldPlayRecords'
+NEWEST_MODEL_FOLDER = './CurrentModel'
+BACKUP_MODEL_FOLDER = './BackupModels'
 
 class AutoTrainer:
     def _get_timestamp(self):
@@ -20,14 +23,13 @@ class AutoTrainer:
             with open('AutoTrainConfig','r') as atconfig:
                 trainedSteps = json.load(atconfig)['Steps']                
         self.config = mconfig.MainConfig()
-        self.sp = self_train.SelfPlay(mconfig.MainConfig())
-        self.op = optimize.Optimizer(mconfig.MainConfig(),trainedSteps)
+        self.sp = SelfPlay(NEWEST_MODEL_FOLDER, PLAY_RECORD_FOLDER, self.config)
+        self.op = Optimizer(self.config, trainedSteps)
 
     def play(self):
-        self.sp.load_model()
-        if not os.path.exists('./selfPlayRecords'):
-            os.mkdir('./selfPlayRecords')
-        currentRecords = os.listdir('./selfPlayRecords')
+        if not os.path.exists(PLAY_RECORD_FOLDER):
+            os.mkdir(PLAY_RECORD_FOLDER)
+        currentRecords = os.listdir(PLAY_RECORD_FOLDER)
         for i in range(len(currentRecords), self.config.train.max_files_num):
             self.sp.single_self_train()
 
@@ -37,17 +39,16 @@ class AutoTrainer:
             json.dump({'Steps' : self.op.total_steps},atconfig)
         
     def backup(self):
-        if os.path.exists('currentModel'):
-            shutil.copytree('currentModel','./backupModels/model' + self._get_timestamp())
+        if os.path.exists(NEWEST_MODEL_FOLDER):
+            shutil.copytree(NEWEST_MODEL_FOLDER, BACKUP_MODEL_FOLDER + '/model' + self._get_timestamp())
 
     def remove_old_records(self):
-        fileList = os.listdir('selfPlayRecords')
-        fileList.sort(key = lambda x: os.path.getmtime('selfPlayRecords/' + x),reverse = True)
-        counter = 0
-        if not os.path.exists('oldSelfplay'):
-            os.mkdir('oldSelfPlay')
+        fileList = os.listdir(PLAY_RECORD_FOLDER)
+        fileList.sort(key = lambda x: os.path.getmtime(PLAY_RECORD_FOLDER + '/' + x),reverse = True)
+        if not os.path.exists(OLD_PLAY_RECORD_FOLDER):
+            os.mkdir(OLD_PLAY_RECORD_FOLDER)
         for i in range(self.config.train.max_files_num - self.config.train.self_play_iteration_count, len(fileList)):
-            shutil.move('selfPlayRecords/' +fileList[i], 'oldSelfPlay')
+            shutil.move(PLAY_RECORD_FOLDER + '/' +fileList[i], OLD_PLAY_RECORD_FOLDER)
 
     def go(self):
         while True:

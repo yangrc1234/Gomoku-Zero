@@ -3,11 +3,10 @@
 from collections import defaultdict
 from collections import namedtuple
 from asyncio.queues import Queue
-import gameCython as game
 import asyncio
 import math
 import numpy as np
-
+from .game import GameState
 from logging import getLogger
 
 QueueItem = namedtuple("QueueItem", "state future")
@@ -30,7 +29,7 @@ class MctsNode:
 class Mcts:
     def __init__(self,config,playerIndex,model,parallelSize = 16):
         self.root_node = MctsNode(config.common.game_board_size)
-        self.root_node.game_board = game.game_state(config.common.game_board_size)
+        self.root_node.game_board = GameState(config.common.game_board_size)
         self.config = config
         self.model = model
         self.step = 0

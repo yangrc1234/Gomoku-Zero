@@ -1,10 +1,10 @@
 from flask import Flask
 from flask import request
-from mcts import Mcts
-from gameCython import game_state
-from configs.normal import EvaluateConfig as modelConfig
-from model import RenjuModel
-from aiclass import AIRunner
+from gomokuzero.mcts import Mcts
+from gomokuzero.game import GameState
+from gomokuzero.configs.normal import EvaluateConfig as modelConfig
+from gomokuzero.model import RenjuModel
+from gomokuzero.aiclass import AIRunner
 import json
 
 app = Flask(__name__)

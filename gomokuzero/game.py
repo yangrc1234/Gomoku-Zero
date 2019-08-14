@@ -4,8 +4,7 @@ from collections import namedtuple
 
 #game_state.board stores the position
 #-1 means there is white, 1 is black, 0 means nothing.
-class game_state: 
-    
+class GameState: 
     def __init__(self,width, playSide = -1):
         self.width = width
         self.board = np.zeros((width,width))
@@ -50,27 +49,27 @@ class game_state:
                 break
             
     def copy(self):
-        copy = game_state(self.width)
+        copy = GameState(self.width)
         copy.board = np.copy(self.board)
         copy.playerSide = self.playerSide
         return copy
 
     def print_beautiful(self):
         result = ''
-        for x in range(width):
-            for y in range(width):
+        for x in range(self.width):
+            for y in range(self.width):
                 if self.board[x][y] == 1 :
-                    result += '●'
+                    result += 'x'
                 if self.board[x][y] == -1:
-                    result += '○'
+                    result += 'o'
                 if self.board[x][y] == 0:
-                    result += '╋'
+                    result += '+'
             result += '\n'
         return result
 
 def test():
     import configs.mini as mconfig
-    testSub = game_state(mconfig.MainConfig().common.game_board_size)
+    testSub = GameState(mconfig.MainConfig().common.game_board_size)
     assert(testSub.playerSide == -1)
     for i in range(4):
         testSub.play(i,0)
