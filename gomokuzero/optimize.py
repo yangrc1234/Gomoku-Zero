@@ -88,8 +88,8 @@ class Optimizer:
 
         for i in range(epoch):
             print(f'Epoch : {i}')
-            self.total_steps += self.train_epoch(1,callbacks)
             self.update_learning_rate(self.total_steps)
+            self.total_steps += self.train_epoch(1,callbacks)
 
     def train_epoch(self, epochs, callbacks):
         history = self.model.model.fit(
