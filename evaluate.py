@@ -1,6 +1,6 @@
-from model import RenjuModel
-import mcts
-from .game import GameState
+from gomokuzero.model import RenjuModel
+from gomokuzero.mcts import Mcts
+from gomokuzero.game import GameState
 
 class Evaluator:
     def __init__(self, m1path, m2path, config):
@@ -26,7 +26,7 @@ class Evaluator:
 
     def single_versus(self):
         gameBoard = GameState(self.config.common.game_board_size)
-        mctsTree = [mcts.Mcts(self.config,-1,self.m1),mcts.Mcts(self.config,1,self.m2)]
+        mctsTree = [Mcts(self.config,-1,self.m1),Mcts(self.config,1,self.m2)]
         playerIndex = -1
         while True:
             print(gameBoard.print_beautiful() + '\n')
@@ -49,6 +49,15 @@ class Evaluator:
             print('Game didn\' finish normally')
 
 if __name__ == '__main__' :
-    from .configs.normal import EvaluateConfig
-    eva = Evaluator('backupModels/model2018-1-10-3-6-3','currentModel', EvaluateConfig())
+    from argparse import ArgumentParser
+    parser = ArgumentParser()
+    parser.add_argument(
+        '-ma', '--modela', type=str
+    )
+    parser.add_argument(
+        '-mb', '--modelb', type=str
+    )
+    args = parser.parse_args()
+    from gomokuzero.configs.normal import EvaluateConfig
+    eva = Evaluator(args.modela,args.modelb, EvaluateConfig())
     eva.test()
