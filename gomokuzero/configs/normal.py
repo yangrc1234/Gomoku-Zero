@@ -8,7 +8,7 @@ class TrainConfig:
         self.tau_change_step = 5
         self.c_puct = 1.0
         self.max_files_num = 1000           #how many games should be stored.(older ones will get moved to oldSelfPlay)
-        self.self_play_iteration_count = 200 #how many games to play for every loop.
+        self.self_play_iteration_count = 1000 #how many games to play for every loop.
         self.iteration_epoch_count = 5      #epoch num for every train.
         self.batch_size = 512
         self.mcts_upwrad_value_decay = 0.9  #I don't know whehter this make the AI better.
