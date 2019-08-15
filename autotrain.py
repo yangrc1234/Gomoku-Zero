@@ -56,7 +56,7 @@ class AutoTrainer:
             self.backup()
             self.optimize()
             self.remove_old_records()
-            time.sleep(60)  #give this guy a rest!
+            time.sleep(5)  
 
 if __name__ == '__main__' :
     AutoTrainer().go()
