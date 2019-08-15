@@ -78,10 +78,7 @@ class Optimizer:
         self.datasets_policy = np.array(self.datasets_policy)
         self.datasets_z = np.array(self.datasets_z)
         self._load_model()
-        callbacks = [
-            PerStepCallback(200, self.save_current_model),
-        ]
-
+        
         self.optimizer = SGD(lr = 1e-2,momentum=0.9)
         losses = [objective_function_for_policy, objective_function_for_value]
         self.model.model.compile(self.optimizer,losses)
@@ -89,14 +86,14 @@ class Optimizer:
         for i in range(epoch):
             print(f'Epoch : {i}')
             self.update_learning_rate(self.total_steps)
-            self.total_steps += self.train_epoch(1,callbacks)
+            self.total_steps += self.train_epoch(1)
+            self.save_current_model()
 
-    def train_epoch(self, epochs, callbacks):
+    def train_epoch(self, epochs):
         history = self.model.model.fit(
             x=self.datasets_x,
             y=[self.datasets_policy,self.datasets_z],
             batch_size=self.config.train.batch_size,
-            callbacks=callbacks,
             epochs=1,
             verbose=1
             ) # type: History
