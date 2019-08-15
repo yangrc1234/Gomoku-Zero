@@ -86,11 +86,11 @@ class Optimizer:
         for i in range(epoch):
             print(f'Epoch : {i}')
             self.update_learning_rate(self.total_steps)
-            self.total_steps += self.train_epoch(1)
+            self.total_steps += self.train_epoch()
             self.save_current_model()
 
-    def train_epoch(self, epochs):
-        history = self.model.model.fit(
+    def train_epoch(self):
+        _ = self.model.model.fit(
             x=self.datasets_x,
             y=[self.datasets_policy,self.datasets_z],
             batch_size=self.config.train.batch_size,
@@ -98,7 +98,7 @@ class Optimizer:
             verbose=1
             ) # type: History
         
-        steps = (self.datasets_x.shape[0] // self.config.train.batch_size) * epochs
+        steps = (self.datasets_x.shape[0] // self.config.train.batch_size)
         return steps
 
     def update_learning_rate(self,total_steps):
