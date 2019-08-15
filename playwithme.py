@@ -5,7 +5,8 @@ from gomokuzero.model import RenjuModel
 
 def test():
     conf = mconfig.EvaluateConfig()
-    model = RenjuModel.load_from_folder_or_new('CurrentModel', mconfig.MainConfig())
+    conf.train.monte_carlo_search_count = 1600  ##Let's consider longer.
+    model = RenjuModel.load_from_folder_or_new('CurrentModel', conf)
 
     while True:
         gameBoard = GameState(conf.common.game_board_size)
