@@ -8,7 +8,7 @@ from gomokuzero.aiclass import AIRunner
 import json
 
 app = Flask(__name__)
-aiRunner = AIRunner()
+aiRunner = AIRunner(modelConfig(), './CurrentModel')
 
 @app.route("/")
 def hello():
