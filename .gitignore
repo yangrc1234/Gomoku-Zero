@@ -1,6 +1,7 @@
 OldPlayRecords
 SelfPlayRecords
 CurrentModel
+BackupModels
 AutoTrainConfig
 *.cpp
 __pycache__

@@ -1,12 +1,12 @@
 ﻿let canvas = document.querySelector("#chessboard");
 let context = canvas.getContext("2d");
+let rowNum = 11; // Board size, make sure this is same with python config.
 
 let me = true; // 判断当前“我”是否有权下棋
 let myColor = true; // 判断“我”的棋子的颜色
 let chessBoard = []; // 棋盘二维数组，存储棋盘信息
 let over = false; // 判断游戏是否结束
 
-let rowNum = 9; // 棋盘行列数
 let rowSpan = 450 / rowNum; // 每一列的宽度
 let space = rowSpan / 2; // 棋盘于盒子边缘的距离
 
@@ -29,7 +29,7 @@ function startGame() {
     me = !document.getElementsByName("choice")[0].checked;
     myColor = !me;
     let playerIndex = me ? -1 : 1;
-    document.querySelector("#start").innerHTML = "重新开始";
+    document.querySelector("#start").innerHTML = "Restart";
     accessData("restartGame", {playerIndex: playerIndex}, function (data) {
         if (data.status === "OK") {
             // 电脑落子
@@ -103,14 +103,14 @@ canvas.onclick = function (e) {
                     if (data.status === "OK") {
                         drawChess(data.move.x, data.move.y, !myColor);
                         if (data.game_status.finished) {
-                            alert("游戏结束，你输了！");
+                            alert("You lost.");
                         } else {
                             me = !me;
                         }
                     }
                 });
             } else {
-                alert("游戏结束，你赢了！");
+                alert("You won.");
                 me = false;
             }
         });
@@ -126,7 +126,7 @@ function accessData(action, data, callback) {
         data: data,
         success: callback,
         error: function (jqXHR) {
-            alert('错误：' + jqXHR.status);
+            alert('Error：' + jqXHR.status);
         }
     });
 }
