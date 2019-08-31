@@ -23,11 +23,11 @@ Config info is under `./configs/normal.py`. Most configs are commented so it's e
 Run `python playwithme.py` To start play with AI, using a ugly cmd interface.
 
 ### Play with AI in browser
-If you have Flask installed, run`python app.py` and a Flask backend will start, which accepts ajax requests.
+If you have Flask installed, run`python app.py` and a Flask backend will start, which accepts ajax requests. 
 
-Open `./AI_Five/index.html`, and you can play with AI.  
+Open `./BrowserUI/index.html`, and you can play with AI. DO NOT OPEN `localhost` or `127.0.0.1` in your browser, nothing will happen, since `app.py` is only a backend which receives requests.
 
-If you've changed the game board size, you need to edit the var `rowNum` in line 3 of `./AI_Five/index.js` to match your game board size during training.
+If you've changed the game board size, you need to edit the var `rowNum` in line 3 of `./BrowserUI/index.js` to match your game board size during training.
 
 ## References
 [1] Silver, David, et al. "Mastering the game of go without human knowledge." Nature 550.7676 (2017): 354.  
